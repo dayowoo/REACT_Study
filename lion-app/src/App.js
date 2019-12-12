@@ -13,6 +13,15 @@ import './App.css';
 // JSX -> style을 통해서 css (jsx)
 // JSX -> className을 통해 css (css->App.css)
 
+function WorldClock(props) {
+  return (
+    //컴포넌트 약속: 맨 최상단의 하나의 "열고닫음" 만 있다.
+    <div class={"WorldClock"}>
+      <h2>🌍도시: {props.city}</h2>
+      <p>⏰시간: {props.time}시</p>
+    </div>
+  )
+}
 
 function App() {
   return (
@@ -23,6 +32,10 @@ function App() {
       <div className={'post'}>
         다영의 첫번째 글
       </div>
+      <WorldClock city={'서울'} time={10}/>
+      <WorldClock city={'베이징'} time={9}/>
+      <WorldClock city={'시드니'} time={12}/>
+      <WorldClock city={'LA'} time={17}/> 
     </div>
   );
 }
