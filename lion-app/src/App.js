@@ -13,24 +13,66 @@ import './App.css';
 // JSX -> style을 통해서 css (jsx)
 // JSX -> className을 통해 css (css->App.css)
 
-function WorldClock(props) {
-  return (
-    //컴포넌트 약속: 맨 최상단의 하나의 "열고닫음" 만 있다.
-    <div className="WorldClock">
-      <h2>
-        <span role="img" aria-label="Earth Emoji">
-          🌏
-        </span>{" "}
-        {props.city}
-      </h2>
-      <p>
-        <span role="img" aria-label="Clock Emoji">
-          ⏰
-        </span>{" "}
-        {props.time}
-      </p>
-    </div>
-  )
+// function WorldClock(props) {
+//   return (
+//     //컴포넌트 약속: 맨 최상단의 하나의 "열고닫음" 만 있다.
+//     <div className="WorldClock">
+//       <h2 >
+//         <span role="img" aria-label="Earth Emoji">
+//           🌏
+//         </span>{" "}
+//         {props.city}
+//       </h2>
+//       <p>
+//         <span role="img" aria-label="Clock Emoji">
+//           ⏰
+//         </span>{" "}
+//         {props.time}
+//       </p>
+//     </div>
+//   )
+// }
+
+// 요구사항 1. 시간과 분이 변화하는 것을 보고 싶다.
+// 요구사항 2. 동적으로 보고싶다. =>props는 못하는 것
+
+class WorldClock extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      hour: this.props.time,
+      minute: 0
+    }
+    //this.setState : state 변경
+    // 절대 안됨!! this.state.minute +=1; ->변화 감지를 못하기 때문 ->새로운거를 덮어씌워서 뭐가 변했는지 확실히 알게 함.
+    setInterval( ()=>{
+      this.setState((state)=>(
+        state.minute === 59
+        ?{hour: state.hour+1, minute:0}
+        :{minute: state.minute+1}
+    ))
+    },1000)
+  }
+  // render 미리 약속된 함수
+  render() {
+    return (
+      <div className={"WorldClock"}>
+        <h2>
+          <span role="img" aria-label="Earth Emoji">
+            🌏
+          </span>{" "}
+          {this.props.city}
+        </h2>
+        <p>
+          <span role="img" aria-label="Clock Emoji">
+            ⏰
+          </span>{" "}
+          {this.state.hour}시 {this.state.minute}분
+        </p>
+      </div>
+    )
+  }
 }
 
 function App() {
