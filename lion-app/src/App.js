@@ -16,26 +16,46 @@ import './App.css';
 function WorldClock(props) {
   return (
     //컴포넌트 약속: 맨 최상단의 하나의 "열고닫음" 만 있다.
-    <div class={"WorldClock"}>
-      <h2>🌍도시: {props.city}</h2>
-      <p>⏰시간: {props.time}시</p>
+    <div className="WorldClock">
+      <h2>
+        <span role="img" aria-label="Earth Emoji">
+          🌏
+        </span>{" "}
+        {props.city}
+      </h2>
+      <p>
+        <span role="img" aria-label="Clock Emoji">
+          ⏰
+        </span>{" "}
+        {props.time}
+      </p>
     </div>
   )
 }
 
 function App() {
+  // 반복되는 코드 따로 빼서 배열로 만듦
+  const cityTimeData = [
+    ['서울', 10],
+    ['베이징', 9],
+    ['시드니', 12],
+    ['LA', 17],
+    ['부산', 10],
+  ]
+
+  const WorldClockList = cityTimeData.map((citytime, index)=>
+    <WorldClock city= {citytime[0]} time={citytime[1]} key={index}/>
+  )
+
   return (
     <div className="App">
       {/* style={{color: 'red'}} */}
       {/* <h1 style={'myStyle'}*/}
-      <h1 className={'myStyle'}>안녕하세요</h1>
+      <h1 className={'myStyle'}>Hello React</h1>
       <div className={'post'}>
         다영의 첫번째 글
       </div>
-      <WorldClock city={'서울'} time={10}/>
-      <WorldClock city={'베이징'} time={9}/>
-      <WorldClock city={'시드니'} time={12}/>
-      <WorldClock city={'LA'} time={17}/> 
+      {WorldClockList}
     </div>
   );
 }
