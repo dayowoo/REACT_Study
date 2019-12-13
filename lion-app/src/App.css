@@ -12,6 +12,15 @@
   margin-bottom: 10px;
 }
 
+.align {
+  padding: 10px;
+}
+
+.button {
+  
+  padding-left: 10px;
+}
+
 .WorldClock {
   border: 1px solid black;
   width: 500px;

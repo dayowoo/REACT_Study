@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 
 // component
@@ -43,11 +43,12 @@ class WorldClock extends React.Component {
     this.state = {
       day: this.props.day,
       hour: this.props.hour,
-      minute: 0
+      minute: 0,
+      stop: false,    //처음에 안멈춰있기 때문
     }
     //this.setState : state 변경
     // 절대 안됨!! this.state.minute +=1; ->변화 감지를 못하기 때문 ->새로운거를 덮어씌워서 뭐가 변했는지 확실히 알게 함.
-    setInterval( ()=>{
+    this.timer = setInterval( ()=>{
       this.setState((state)=>(
           state.hour === 23 && state.minute === 59
           ?{day: state.day+1, hour: 0, minute:0}
@@ -57,6 +58,14 @@ class WorldClock extends React.Component {
     ))
     },100)
   }
+
+  handlingClik = (event) => {
+    //event.target: 이벤트의 범위
+    console.log(event.target)
+    this.setState({stop: event.target.value})
+    clearInterval(this.timer)
+  }
+
   // render 미리 약속된 함수
   render() {
     return (
@@ -72,38 +81,56 @@ class WorldClock extends React.Component {
             ⏰
           </span>{" "}
           {this.state.day}일 {this.state.hour}시 {this.state.minute}분
+          <div className={'button'}>
+            <button value={true} onClick={this.handlingClik}>멈춰!</button>
+          </div>
         </p>
+        
       </div>
     )
   }
 }
 
-function App() {
-  // 반복되는 코드 따로 빼서 배열로 만듦
-  const cityTimeData = [
-    ['서울', 0, 10],
-    ['베이징', 0, 9],
-    ['시드니', 0, 12],
-    ['LA', 0, 17],
-    ['부산', 0, 10],
-  ]
+class App extends React.Component {
+  
+  constructor(props) {
+    super(props)
+    this.cityTimeData = [
+      ['서울', 0, 10],
+      ['베이징', 0, 9],
+      ['시드니', 0, 12],
+      ['LA', 0, 17],
+      ['부산', 0, 10],
+    ]
+    this.state = {
+      content: ''
+    }
+  }
+  
+  handlingChange = (event) => {
+    this.setState({content: event.target.value})
+  }
 
-  const WorldClockList = cityTimeData.map((citytime, index)=>
-    <WorldClock city= {citytime[0]} day={citytime[1]} hour={citytime[2]} key={index}/>
-  )
-
-  return (
-    <div className="App">
-      {/* style={{color: 'red'}} */}
-      {/* <h1 style={'myStyle'}*/}
-      <h1 className={'myStyle'}>Hello React</h1>
-      <div className={'post'}>
-        다영의 첫번째 글
+  render() {
+    return (
+      <div className="App">
+        {/* style={{color: 'red'}} */}
+        {/* <h1 style={'myStyle'}*/}
+        <h1 className={'myStyle'}>Hello React</h1>
+        <div className={'post'}>
+          다영의 첫번째 글
+          <div className={'align'}>
+            <textarea value={this.state.content} onChange={this.handlingChange}></textarea>
+          </div>
+        </div>
+          {this.cityTimeData.map((citytime, index)=>
+          <WorldClock city= {citytime[0]} day={citytime[1]} hour={citytime[2]} key={index}/>
+          )
+          }
       </div>
-      {WorldClockList}
-    </div>
-  );
-}
+    );
+    }
+  }
 
 // component export(수출) ->index.js 에서 수입
 // default : 이 파일은 default(기본적으로, 하나만) export 하겠다
@@ -120,16 +147,16 @@ export default App;
 
 ///////////////////
 
-function App2() {
-  return (
-    <div className="App">
-      <h1>안녕히 가세요</h1>
-      <table>
-        <tr><td>1</td></tr>
-        <tr><td>2</td></tr>
-      </table>
-    </div>
-  );
-}
+// function App2() {
+//   return (
+//     <div className="App">
+//       <h1>안녕히 가세요</h1>
+//       <table>
+//         <tr><td>1</td></tr>
+//         <tr><td>2</td></tr>
+//       </table>
+//     </div>
+//   );
+// }
 
 
