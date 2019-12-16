@@ -46,6 +46,12 @@ class WorldClock extends React.Component {
       minute: 0,
       stop: false,    //처음에 안멈춰있기 때문
     }
+    console.log("  Child) 시작합니다.")
+  }
+  
+
+
+  componentDidMount() {
     //this.setState : state 변경
     // 절대 안됨!! this.state.minute +=1; ->변화 감지를 못하기 때문 ->새로운거를 덮어씌워서 뭐가 변했는지 확실히 알게 함.
     this.timer = setInterval( ()=>{
@@ -56,7 +62,17 @@ class WorldClock extends React.Component {
             ?{hour: state.hour+1, minute:0}
             :{minute: state.minute+1})
     ))
-    },100)
+    },5000)
+    console.log("  Child) 마운트 되었습니다.")
+  }
+
+  componentDidUpdate() {
+    console.log("  Child) 업데이트!")
+  }
+
+  componentWillUnmount() {
+    console.log("  Child) 언마운트!")
+    clearInterval(this.timer)
   }
 
   handlingClik = (event) => {
@@ -91,6 +107,8 @@ class WorldClock extends React.Component {
   }
 }
 
+
+// 부모 Component
 class App extends React.Component {
   
   constructor(props) {
@@ -103,12 +121,26 @@ class App extends React.Component {
       ['부산', 0, 10],
     ]
     this.state = {
-      content: ''
+      content: '',
+      show: true,
     }
+    console.log("Parent) 시작합니다.")
   }
   
+  componentDidMount() {
+    console.log("Parent) 마운트 되었습니다.")
+  }
+
+  componentDidUpdate() {
+    console.log("Parent) 업데이트!")
+  }
+
   handlingChange = (event) => {
     this.setState({content: event.target.value})
+  }
+
+  handlingClik = (event) => {
+    this.setState((prevState)=>({show: !prevState.show}))
   }
 
   render() {
@@ -123,11 +155,13 @@ class App extends React.Component {
             <textarea value={this.state.content} onChange={this.handlingChange}></textarea>
           </div>
         </div>
-          {this.cityTimeData.map((citytime, index)=>
-          <WorldClock city= {citytime[0]} day={citytime[1]} hour={citytime[2]} key={index}/>
+        <button onClick={this.handlingClik}>손가락 튕기기</button>
+        { this.state.show &&
+          this.cityTimeData.map((citytime, index)=>
+          <WorldClock city={citytime[0]} time={citytime[1]} key={index} />
           )
           }
-      </div>
+        </div>
     );
     }
   }
